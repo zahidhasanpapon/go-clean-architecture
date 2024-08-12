@@ -1,5 +1,5 @@
 app:
-  name: 'go-clean-template'
+  name: 'go-clean-architecture-template'
   version: '1.0.0'
 
 http:
@@ -15,3 +15,15 @@ postgres:
 rabbitmq:
   rpc_server_exchange: 'rpc_server'
   rpc_client_exchange: 'rpc_client'
+
+# APP_PORT=9090 go run main.go
+app_name: "My Go Microservice"
+port: 8080
+log_level: "info"
+database_url: "postgres://user:password@localhost:5432/mydb"
+redis_url: "redis://localhost:6379"
+etcd:
+  endpoints:
+    - "127.0.0.1:2379"
+  username: "root"
+  password: "your-etcd-password"
