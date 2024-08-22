@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/spf13/viper"
@@ -53,4 +54,16 @@ func LoadConfigFromEtcd(cfg *Config) error {
 	}
 
 	return nil
+}
+
+func watchEtcd(client clientv3.Client) {
+	watchChan := client.Watch(context.Background(), "config/application")
+	for watchResp := range watchChan {
+		for _, event := range watchResp.Events {
+			log.Printf("Config in etcd changed: %s", event.Kv.Key)
+			if err := viper.MergeConfig(strings.NewReader(string(event.Kv.Value))); err != nil {
+				log.Printf("Error merging new config from etcd: %s", err)
+			}
+		}
+	}
 }
